@@ -1,0 +1,21 @@
+algorithme MonProgramme debut
+
+declarer entier mavar <- 8;
+
+// Ici on affiche Hello World si mavar vaut 7 :
+
+si (mavar vaut 7)
+    afficher('Hello World');
+fsi
+
+/* Ce ci
+
+est 
+
+un
+
+super grand commentaire =) !!
+
+*/
+
+fin

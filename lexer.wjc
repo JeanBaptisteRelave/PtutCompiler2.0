@@ -1,0 +1,61 @@
+% keywords:
+
+algorithme ALGO
+debut DEBUT
+fin FIN
+<- AF
+declarer DEC
+bool TYPE_BOOL
+reel TYPE_REEL
+entier_naturel TYPE_UNSIGNED
+entier TYPE_INT
+vrai BOOLEN_TRUE
+faux BOOLEN_FALSE
+in CONSTANCE_I
+out CONSTANCE_O
+in_out CONSTANCE_IO
+ET_ALORS|OU_SINON OPERATEUR_LOGIQUE
+renvoie 
+: DP
++ PLUS
+- MOINS
+* FOIS
+/ DIV
+% MOD
+pour FOR
+variant_de VARIANT_OF
+a TO
+sortie BREAK
+boucle WHILE_TRUE
+fboucle END_WHILE_TRUE
+repeter REPEAT 
+jusqua UP_TO
+tant_que WHILE
+faire DO
+ffaire END_DO
+si IF
+sinon_si ELSE_IF
+sinon ELSE
+fsi ENDIF
+procedure PROCEDURE
+fonction FONCTION
+vaut COMPARATIF_VAUT
+ne_vaut_pas COMPARATIF_VAUT_PAS
+> COMPARATIF_GRAND
+< COMPARATIF_PETIT
+<= COMPARATIF_PETIT_EGAL
+>= COMPARATIF_GRAND_EGAL
+tableau_de TABLEAU_DE
+
+
+
+% separators:
+
+; PV
+, VRGL
+( PAR_EN
+) PAR_FER
+{ ACC_EN
+} ACC_FER
+[ CR_EN
+] CR_FER
