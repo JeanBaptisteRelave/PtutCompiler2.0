@@ -23,7 +23,7 @@ se passe bien.*
 
 <hr/>
 
-## Définision des class
+## Définition des classes
 
 ### { Class LEXER }
 
