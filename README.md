@@ -12,6 +12,7 @@
 	- [Fichiers WJC](#fichiers-wjc)
 		- [Lexer.wjc](#lexer.wjc)
 		- [Parser.wjc](#parser.wjc)
+- [Test Lexer](#test-lexer)
 
 # Documentation technique
 ## Main
@@ -207,3 +208,44 @@ Lexème inconnu ou éroné     : LEXV_ERROR
 
 	CORPS : DEBUT PROG FIN;
 > "CORPS :" - Ici nous définissons un nœud de notre arbre syntaxique et après les deux points nous définissons sa forme, avec d'autres nœuds ou des identifiants de token.
+
+
+# Test Lexer
+
+> Fichier main.cpp :
+``` c++
+#include <iostream>
+#include "lexer.h"
+
+using namespace std;
+
+int main(int argc, char const *argv[])
+{
+	string source(" ");
+	LEXER lex(source);
+	lex.setFilePath("chemin/lexer.wjc");
+	
+	lex.test_analyse();
+	return 0;
+}
+```
+
+> Terminal :
+
+    LEXER - TEST ANALYSE ('quit' to exit)
+    
+     > test
+	    Token : LEXV_ID
+    
+     > declarer
+	    Token :  DEC
+    
+     > 45
+	    Token : LEXV_NUMBER
+    
+     > 2.67
+	    Token : LEXV_FLOAT
+    
+     > 52.12.65
+	 LEXER:ERR [l0:0:52.12.65] : Lexeme with too many dots
+	    Token : LEXV_ERROR
