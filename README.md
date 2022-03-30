@@ -65,12 +65,17 @@ void setFilePath(const string &path)
 <br/>
 
 ``` c++
+void  test_analyse()
+```
+> Cette fonction permet de tester le lexer en entrant des chaines de caractère dans le terminal.
+
+<br/>
+
+``` c++
 bool start_analyse()
 ```
 
-> Cette fonction permet de lancer l'analyse lexicale, elle peux être
-> utilisé directement sur notre objet mais elle sera surtout utilisé par
-> un objet de type PARSER.
+> Cette fonction permet de lancer l'analyse lexicale, elle sera utilisé par un objet de type PARSER.
 > Elle retourne True si tout se passe bien sinon False.
 
 <br/>
@@ -152,8 +157,10 @@ std::string m_lexer_location_file;
 > Identifiants :
 
 ```
-Nombre              : LEXV_NUMBER
-Chaine de caractère : LEXV_ID
+Nombre entier               : LEXV_NUMBER
+Nombre flotant              : LEXV_FLOAT
+Chaine de caractère         : LEXV_ID
+Lexème inconnu ou éroné     : LEXV_ERROR
 ``` 
 <br/><br/><br/>
 ## Fichiers WJC
