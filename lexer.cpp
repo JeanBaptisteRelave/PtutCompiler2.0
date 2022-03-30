@@ -8,7 +8,7 @@ using namespace std;
 LEXER::LEXER(const string &source): m_source(source), m_source_size(source.length()){}
 
 /*
-    display_error();
+    lexer_display_error();
     Display an error.
     Parameters :
         Err  : Error message.
@@ -16,11 +16,34 @@ LEXER::LEXER(const string &source): m_source(source), m_source_size(source.lengt
         Pos  : Error caractère position.
         Car  : Error caractère (or string).
 */
-void display_error(const string &err, unsigned line = 0, unsigned pos = 0, string car = ""){
+void lexer_display_error(const string &err, unsigned line = 0, unsigned pos = 0, string car = ""){
     if(car.length() <= 0)
         cout << "LEXER:ERR : " << err << endl;
     else
         cout << "LEXER:ERR [l" << line << ":" << pos << ":" << car << "] : " << err << endl;
+}
+
+void LEXER::test_analyse(){
+    if(!set_lex_list()){
+        return;
+    }
+
+    string lex("");
+    token tk(2);
+
+    cout << endl << "LEXER - TEST ANALYSE ('quit' to exit)" << endl;
+
+    while(lex != "quit"){
+        cout << " > ";
+        cin >> lex;
+
+        if(is_separator(lex, tk)){
+            cout << "Separator : " << tk[0] << endl << endl;
+        }else{
+            set_tk(lex, tk);
+            cout << "Token : " << tk[0] << endl << endl;
+        }
+    }
 }
 
 /*
@@ -28,7 +51,7 @@ void display_error(const string &err, unsigned line = 0, unsigned pos = 0, strin
     Set the lexer file path.
 */
 void LEXER::setFilePath(const string &path){
-    m_lerxer_location_file = path;
+    m_lexer_location_file = path;
 }
 
 /*
@@ -36,13 +59,13 @@ void LEXER::setFilePath(const string &path){
     get on lexeme from lexer.wjc file.
 */
 bool LEXER::set_lex_list(){
-    if(m_lerxer_location_file.length() <= 0)
+    if(m_lexer_location_file.length() <= 0)
     {
-        display_error("[lexer.wjc] - File location not specified. Please use LEXER::setFilePath()");
-        return 0;
+        lexer_display_error("[lexer.wjc] - File location not specified. Please use LEXER::setFilePath()");
+        return false;
     }
 
-    ifstream if_flux(m_lerxer_location_file);
+    ifstream if_flux(m_lexer_location_file);
 
     if(if_flux)
     {
@@ -78,7 +101,7 @@ bool LEXER::set_lex_list(){
     }
     else
     {
-        display_error("[lexer.wjc] - File not found");
+        lexer_display_error("[lexer.wjc] - File not found");
         if_flux.close();
         return false;
     }
@@ -118,6 +141,13 @@ void LEXER::set_tk(string lex, token &tk) const{
         tk[1] = stoi(lex);
         return;
     }
+
+    /*Float :
+    if(isNumber(lex)){
+        tk[0] = "LEXV_FLOAT";
+        tk[1] = stoi(lex);
+        return;
+    }*/
 
     //ID :
     tk[0] = "LEXV_ID";
@@ -214,7 +244,7 @@ token LEXER::get_next_lex(unsigned &source_position) const{
 bool LEXER::start_analyse(){
     if(m_source_size <= 0)
     {
-        display_error("Source is empty.");
+        lexer_display_error("Source is empty.");
         return false;
     }
 

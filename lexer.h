@@ -14,12 +14,13 @@ public:
     LEXER(const string &source);
     bool start_analyse();
     void setFilePath(const string &path);
+    void test_analyse();
 
 private:
     string m_source;
     unsigned m_source_size;
     vector<token> m_lex_list;
-    string m_lerxer_location_file;
+    string m_lexer_location_file;
 
     bool set_lex_list();
     token get_next_lex(unsigned &source_position) const;
