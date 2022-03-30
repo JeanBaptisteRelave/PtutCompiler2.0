@@ -20,6 +20,8 @@
 n'importe qui.*
 
 ``` c++
+string source(" "); // La chaine ne doit pas être vide sinon le Lexer retourne une erreur.
+
 LEXER lex(source); // Création d'un objet de type LEXER.
 lex.setFilePath("chemin/lexer.wjc"); // Définir le chemin vers le fichier "lexer.wjc".
               
