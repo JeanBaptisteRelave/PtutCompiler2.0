@@ -20,10 +20,10 @@
 n'importe qui.*
 
 ``` c++
-LEXER lex(source);
-lex.setFilePath("C:/Users/jeanb/Documents/DUT2/PTUT/compiler/lexer.wjc");
+LEXER lex(source); // Création d'un objet de type LEXER.
+lex.setFilePath("chemin/lexer.wjc"); // Définir le chemin vers le fichier "lexer.wjc".
               
-// lex.start_analyse();
+lex.test_analyse(); // Nous permet de lancer une analyse lexème par lexème dans le terminale.
 ```
 
 *Premièrement on lit le fichier source afin de le stocker dans une chaine de caractère.
