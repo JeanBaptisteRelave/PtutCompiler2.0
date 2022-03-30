@@ -1,6 +1,18 @@
 # PtutCompiler2.0
 2.0 Version - Compiler IUT Aix-Marseille University
 
+# PtutCompiler2.0
+2.0 Version - Compiler IUT Aix-Marseille University
+
+# Sommaire :
+- [Documentation technique](#documentation-technique)
+	- [Fonction main()](#main)
+	- [Définition des classes](#définition-des-classes)
+		- [LEXER](#class-lexer)
+	- [Fichiers WJC](#fichiers-wjc)
+		- [Lexer.wjc](#lexer.wjc)
+		- [Parser.wjc](#parser.wjc)
+
 # Documentation technique
 ## Main
 
@@ -25,7 +37,7 @@ se passe bien.*
 
 ## Définition des classes
 
-### { Class LEXER }
+### Class LEXER
 
 #### *Description :*
 
@@ -143,3 +155,46 @@ std::string m_lexer_location_file;
 Nombre              : LEXV_NUMBER
 Chaine de caractère : LEXV_ID
 ``` 
+<br/><br/><br/>
+## Fichiers WJC
+
+### Lexer.wjc
+
+    % keywords:
+    
+    if IF_CONDITION
+    ELSE ELSE_CONDITION
+    end FIN_PROG
+    
+    % separators:
+    
+    ; PV
+    , VRGL
+
+> Voici un exemple pour ce fichier.
+> 
+> "% keywords :" - A partir d'ici on précise que les prochaines lignes définissent des lexèmes protégés donc utilisés dans notre grammaire.
+> 
+> "% separators:" - A partir d'ici on précise que les prochaines lignes définissent des lexèmes séparateurs utilisés dans notre grammaire.
+
+	if IF_CONDITION
+> En premier on écrit le lexème tel qui doit être trouvé dans notre source, séparé d'un espace on précise l'identifiant de ce lexème, qui sera utilisé pour l'analyse syntaxique.
+
+
+### Parser.wjc
+
+	S : ALGO LEXV_ID CORPS;
+	
+	CORPS : DEBUT PROG FIN;
+	
+	PROG : DECLARATION | AFFECTATION | DECLARATION_SOUS_PROGRAMME | APPEL
+		   | STRUCTURE_DE_CONTROLE | BREAK | PROG PROG;
+> Voici un exemple (non complet) pour ce fichier.
+> Ici nous définissons la syntaxe de notre langage, la class PARSER va par la suite générer un arbre syntaxique en référence à ce fichier, il est donc essentiel de bien l'organiser pour éviter les erreurs du parser.
+
+	S : ALGO LEXV_ID CORPS;
+
+> Ici on définit notre axiome "S", il est obligatoire dans ce fichier car c'est la racine de l'arbre syntaxique, sans ça le parser ne pourras pas créer d'arbre.
+
+	CORPS : DEBUT PROG FIN;
+> "CORPS :" - Ici nous définissons un nœud de notre arbre syntaxique et après les deux points nous définissons sa forme, avec d'autres nœuds ou des identifiants de token.
