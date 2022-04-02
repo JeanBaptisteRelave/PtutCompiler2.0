@@ -93,15 +93,6 @@ void  test_analyse()
 <br/>
 
 ``` c++
-bool start_analyse()
-```
-
-> Cette méthode permet de lancer l'analyse lexicale, elle sera utilisé par un objet de type PARSER.
-> Elle retourne True si tout se passe bien sinon False.
-
-<br/>
-
-``` c++
 bool set_lex_list()
 ```
 
