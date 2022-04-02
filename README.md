@@ -17,24 +17,41 @@
 # Documentation technique
 ## Main
 
-*La fonction principale de ce programme est simplifier afin de pouvoir être modifier facilement par
-n'importe qui.*
-
 ``` c++
-string source(" "); // La chaine ne doit pas être vide sinon le Lexer retourne une erreur.
+#include <iostream>
+#include <fstream>
+#include "lexer.h"
+#include "parser.h"
 
-LEXER lex(source); // Création d'un objet de type LEXER.
-lex.setFilePath("chemin/lexer.wjc"); // Définir le chemin vers le fichier "lexer.wjc".
-              
-lex.test_analyse(); // Nous permet de lancer une analyse lexème par lexème dans le terminale.
+using namespace std;
+
+int main(int argc, char const *argv[])
+{
+    ifstream if_flux("/main.pdut");
+    string source;
+
+    string line;
+    while(getline(if_flux, line))
+        source += line + "\n";
+
+    LEXER lex(source);
+    lex.setFilePath("/lexer.wjc");
+    
+    PARSER synt(&lex);
+    synt.setFilePath("/parser.wjc");
+    
+    synt.start_analyse();
+    return 0;
+}
 ```
 
 *Premièrement on lit le fichier source afin de le stocker dans une chaine de caractère.
-Ensuite on creer un objet de la class LEXER et en paramètre on lui passe la source.
+Ensuite on creer un objet de la classe LEXER et en paramètre on lui passe la source.
 Ensuite on utilise la fonction "setFilePath" pour définir à notre objet la destination (chemin) du 
 fichier "lexer.wjc"
-On pourrait par la suite utiliser la fonction "start_analyse()" afin de vérifier si l'analyse lexicale
-se passe bien.*
+Par la suite on creer un objet de la classe PARSER en lui passant en paramètre un pointer vers notre objet LEXER.
+On utilise la méthode "setFilePath" en lui passant en paramètre le chemin vers le fichier "parser.wjc".
+En lance ensuite l'analyse avec la méthode "start_analyse" de notre class PARSER.*
 
 <hr/>
 
