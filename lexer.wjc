@@ -52,8 +52,8 @@ tableau_de TABLEAU_DE
 % separators:
 
 ; PV
-, VRGL
-( PAR_EN
+, VIRGL
+( PAR_OU
 ) PAR_FER
 { ACC_EN
 } ACC_FER

@@ -12,9 +12,12 @@ class LEXER
 {
 public:
     LEXER(const string &source);
-    bool start_analyse();
     void setFilePath(const string &path);
     void test_analyse();
+    bool is_token(string id) const;
+    bool start_analyse() const;
+    token get_next_lex(unsigned &source_position) const;
+    unsigned get_source_size() const;
 
 private:
     string m_source;
@@ -23,7 +26,6 @@ private:
     string m_lexer_location_file;
 
     bool set_lex_list();
-    token get_next_lex(unsigned &source_position) const;
     bool is_separator(string car, token &tk) const;
     void set_tk(string lex, token &tk) const;
 };

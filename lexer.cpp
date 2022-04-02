@@ -13,8 +13,8 @@ LEXER::LEXER(const string &source): m_source(source), m_source_size(source.lengt
     Parameters :
         Err  : Error message.
         Line : Error line.
-        Pos  : Error caractère position.
-        Car  : Error caractère (or string).
+        Pos  : Error position.
+        Car  : Error caract�re.
 */
 void lexer_display_error(const string &err, unsigned line = 0, unsigned pos = 0, string car = ""){
     if(car.length() <= 0)
@@ -23,25 +23,29 @@ void lexer_display_error(const string &err, unsigned line = 0, unsigned pos = 0,
         cout << "LEXER:ERR [l" << line << ":" << pos << ":" << car << "] : " << err << endl;
 }
 
-void LEXER::test_analyse(){
-    if(!set_lex_list()){
-        return;
-    }
+bool LEXER::is_token(string id) const{
+    for (unsigned i(0); i < m_lex_list.size(); ++i)
+        if(m_lex_list[i][1] == id)
+            return true;
 
+    return false;
+}
+
+void LEXER::test_analyse(){
     string lex("");
     token tk(2);
 
-    cout << endl << "LEXER - TEST ANALYSE ('quit' to exit)" << endl;
+    cout << endl << "LEXER - TEST ANALYSE ('quit' to exit)" << endl << endl;
 
     while(lex != "quit"){
         cout << " > ";
         cin >> lex;
 
         if(is_separator(lex, tk)){
-            cout << "Separator : " << tk[0] << endl << endl;
+            cout << "   Separator : " << tk[0] << endl << endl;
         }else{
             set_tk(lex, tk);
-            cout << "Token : " << tk[0] << endl << endl;
+            cout << "   Token : " << tk[0] << endl << endl;
         }
     }
 }
@@ -52,6 +56,7 @@ void LEXER::test_analyse(){
 */
 void LEXER::setFilePath(const string &path){
     m_lexer_location_file = path;
+    set_lex_list();
 }
 
 /*
@@ -87,7 +92,7 @@ bool LEXER::set_lex_list(){
                 continue;
 
             string lexeme = line.substr(0, line.find(" "));
-            string token = line.substr(lexeme.length(), line.length());
+            string token = line.substr(lexeme.length() + 1, line.length());
 
             vlex.push_back(lexeme);
             vlex.push_back(token);
@@ -117,6 +122,27 @@ bool LEXER::is_separator(string car, token &tk) const{
     return false;
 }
 
+token str_split(string str, char separator){
+    token tk;
+    string actual_str;
+
+    for(unsigned i(0); i < str.length(); ++i) {
+       if(str[i] == separator){
+           tk.push_back(actual_str);
+           actual_str = "";
+           continue;
+       }
+
+       actual_str += str[i];
+
+       if(i == str.length() - 1){
+           tk.push_back(actual_str);
+       }
+    }
+
+    return tk;
+}
+
 bool isNumber(const string& s)
 {
     for (char const &ch : s)
@@ -142,12 +168,21 @@ void LEXER::set_tk(string lex, token &tk) const{
         return;
     }
 
-    /*Float :
-    if(isNumber(lex)){
+    token tk2;
+    tk2 = str_split(lex, '.');
+
+    // Float :
+    if(tk2.size() == 2 && isNumber(tk2[0]) && isNumber(tk2[1])){
         tk[0] = "LEXV_FLOAT";
-        tk[1] = stoi(lex);
+        tk[1] = stoi(lex) + stoi("0." + tk2[1]);
         return;
-    }*/
+    }
+
+    if(tk2.size() > 2){
+        lexer_display_error("Lexeme with too many dots", 0, 0, lex);
+        tk[0] = "LEXV_ERROR";
+        return;
+    }
 
     //ID :
     tk[0] = "LEXV_ID";
@@ -236,31 +271,20 @@ token LEXER::get_next_lex(unsigned &source_position) const{
     return tk;
 }
 
+unsigned LEXER::get_source_size() const{
+    return m_source_size;
+}
+
 /*
     start_analyse();
     Start the lexical analysis.
     Return true on success else false.
 */
-bool LEXER::start_analyse(){
+bool LEXER::start_analyse() const{
     if(m_source_size <= 0)
     {
         lexer_display_error("Source is empty.");
         return false;
-    }
-
-    if(!set_lex_list()){
-        return false;
-    }
-
-    unsigned source_position(0);
-    int i(0);
-    while(source_position < m_source_size){
-        token tk(get_next_lex(source_position));
-        cout << "TK : " << tk[0] << "(" << tk[1] << ")" << endl;
-
-        ++i;
-        if(i > 30)
-            break;
     }
 
     return true;

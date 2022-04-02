@@ -17,10 +17,10 @@ int main(int argc, char const *argv[])
     LEXER lex(source);
     lex.setFilePath("C:/Users/jeanb/Documents/DUT2/PTUT/compiler/lexer.wjc");
 
-    lex.test_analyse();
+    PARSER synt(&lex);
+    synt.setFilePath("C:/Users/jeanb/Documents/DUT2/PTUT/compiler/parser.wjc");
 
-    //PARSER synt(&lex);
-    //synt.setFilePath("C:/Users/jeanb/Documents/DUT2/PTUT/compiler/lexer.wjc");
+    synt.start_analyse();
 
     return 0;
 }
