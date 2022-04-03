@@ -5,19 +5,19 @@
 
 <img src="https://i.ibb.co/41LQ3bT/Marcla-Parse-1.png" width="300" height="65" /> <img src="https://i.ibb.co/JjD7gCh/CasaLex.png" width="300" height="65" />
 
-# Sommaire :
-- [Documentation technique](#documentation-technique)
-	- [Fonction main()](#main)
-	- [Définition des classes](#définition-des-classes)
-		- [LEXER](#class-lexer)
-		- [PARSER](#class-parser)
-	- [Fichiers WJC](#fichiers-wjc)
+# Summary :
+- [Technical documentation](#technical-documentation)
+	- [Function main()](#main)
+	- [Classes definition](#classes-definition)
+		- [LEXER](#lexer-class)
+		- [PARSER](#parser-class)
+	- [WJC Files](#wjc-files)
 		- [Lexer.wjc](#lexer.wjc)
 		- [Parser.wjc](#parser.wjc)
-	- [Les erreurs](#les-erreurs)
-- [Test Lexer](#test-lexer)
+	- [Errors](#errors)
+- [Lexer Test](#lexer-test)
 
-# Documentation technique
+# Technical documentation
 ## Main
 
 ``` c++
@@ -48,32 +48,30 @@ int main(int argc, char const *argv[])
 }
 ```
 
-*Premièrement on lit le fichier source afin de le stocker dans une chaine de caractère.
-Ensuite on creer un objet de la classe LEXER et en paramètre on lui passe la source.
-Ensuite on utilise la fonction "setFilePath" pour définir à notre objet la destination (chemin) du 
-fichier "lexer.wjc"
-Par la suite on creer un objet de la classe PARSER en lui passant en paramètre un pointer vers notre objet LEXER.
-On utilise la méthode "setFilePath" en lui passant en paramètre le chemin vers le fichier "parser.wjc".
-En lance ensuite l'analyse avec la méthode "start_analyse" de notre class PARSER.*
+*First, it read the source file and write it as a string.
+Then a LEXER class object is created with the source as a parameter.
+It next uses the "setFilePath" function which defines the way to reach the lexer file.
+After that, a PARSER class object is created with a pointer to the LEXER class object previously created as a paramater.
+And then it uses the "setFilePath" function which defines the way to reach the parser file.
+Finally, it uses the PARSER class "start_analyse" method which launch the syntax analysis*
 
 <hr/>
 
-## Définition des classes
+## Classes definition
 
-### Class LEXER
+### LEXER class
 
 #### *Description :*
 
-> Cette classe effectue l'intégralité de l'analyse léxical et est utilisé par la classe PARSER afin de lui communiqué des tokens.
+> This class realise the whole lexical analysis and is used by the PARSER class which needs the tokens generated.
 
-#### *Méthodes:*
+#### *Methods:*
 ``` c++
 LEXER(const string &source)
 ```
 
-> Le constructeur prend en paramètre une source de type string, il
-> s'agit simplement du code source que l'on doit analyser, ce paramètre
-> est obligatoire pour initialiser un objet de type LEXER.
+> This constructor take a string type source that we have to analyse as a parameter. 
+> This parameter is mandatory to initialyse a LEXER class object
 
 <br/>
 
@@ -81,16 +79,15 @@ LEXER(const string &source)
 void setFilePath(const string &path)
 ```
 
-> Cette procédure est essentiel pour que notre class initialise une
-> grammaire, elle prend en paramètre une chaine de caractère qui est le
-> chemin vers le fichier "lexer.wjc" qui sera expliquer plus loins.
+> This procedure is mandatory for our class to initialise a grammary. 
+> It takes the path to the lexer file as a parameter
 
 <br/>
 
 ``` c++
 void  test_analyse()
 ```
-> Cette méthode permet de tester le lexer en entrant des chaines de caractère dans le terminal.
+> This method can be used to test the lexer by strings written into a terminal
 
 <br/>
 
@@ -98,10 +95,8 @@ void  test_analyse()
 bool set_lex_list()
 ```
 
-> Cette méthode va lire le fichier "lexer.wjc" afin de récuperer et
-> stocker les lexèmes de notre grammaire dans un vecteur de vecteur de
-> chaine de caractère. Il stock le lexème et son identifiant. Retourne
-> False si il y a une erreur sinon True.
+> This method uses the lexer definition file to associate the lexemes with their definition and then, put the association into a two-dimensionnal string array.
+> It returns false if there is a mistake or true if everything is right.
 
 <br/>
 
@@ -109,12 +104,12 @@ bool set_lex_list()
 token get_next_lex(unsigned &source_position)
 ```
 
-> Cette méthode retourne un token qui est un vecteur de chaine de caractère avec trois chaines, la première est l'identifiant du lexème, le deuxième est sa valeur (optionnel) et pour la troisième si la valeur est "0" alors c'est un simple lexème si la valeur est "1" alors c'est un séparateur ex: ;, (, [.
-> Le paramètre est un entier naturel qui est la position de lecture sur notre source,
-> c'est à dire le caractère sur lequel on s'est arreté. Le Parser va appellé cette méthode pour récupérer le prochain token de notre analyse. 
+> This method returns a token which is a two-dimensionnal string array with three strings : The first is the lexeme id, the second is his value, the third identifies if it's a keyword (when the parameter is 0) or a separator (when the parameter is 1).
+> The source_position parameter informs us on the position where the source reading stopped at this point.
+> The Parser will call this method to get the next token to analyse
 
-**Technique:**
-*Cette méthode prend en compte les commentaire afin de les éviter (// et /* */). Elle va simplement récuperer tous les lexèmes qui se séparents entre un séparateur, un espace ou un retour à la ligne, si le lexème trouvé est dans notre grammaire elle va retourner un token correspondant à ce lexème sinon elle retourne un token correspondant au type trouvé (Nombre, chaine de caractère). Elle fait appelle à la méthode set_tk() afin de générer un token.*
+**Technical:**
+*The method avoid the comments by identifing them (// and /* */). It get every tokens that are between two separators (a space or a carriage return). If the lexeme is found on the grammary, it will return the related token, else, it returns a token related to the token type (Number, string). It calls the "set_tk()" method that generate a token*
 
 <br/>
 
@@ -122,8 +117,8 @@ token get_next_lex(unsigned &source_position)
 bool is_separator(string car, token &tk)
 ```
 
-> Cette méthode retourne True si le caractère est un séparateur dans notre grammaire sinon False.
-> Le premier paramètre "car" est notre caractère en type string afin de simplifier le traitement, le deuxième paramètre est un pointer vers le token utilisé dans la méthode get_next_lex() afin de pouvoir le modifier directement et l'assigner au lexème séparateur.
+> This method returns true if the character is a separator or false if it is not.
+> The parameter car is the character that will be tested. The second parameter tk is a token pointer to the token processed in the "get_next_lex()" method so we can directly modify it.  
 
 <br/>
 
@@ -131,39 +126,39 @@ bool is_separator(string car, token &tk)
 void set_tk(string lex, token &tk)
 ```
 
-> Cette méthode utilisé par la méthode get_next_lex() nous sert à generer un token qui est un vecteur de 3 chaines de caractères.
-> Le premier paramètre "lex" est le lexème à traiter et le deuxième "tk" est le token utilisé par  		la fonction get_next_lex() afin de le modifier pour y ajouter les informations du lexème.
+> This method used in the "get_next_lex()" method generate the token (the 3 string array).
+> The first parameter "lex" is the lexeme to process. The "tk" parameter is used by the "get_next_lex()" method to add or modify the lexeme's information.
 
-**Technique:**
-*Premièrement la méthode boucle dans dans le vecteur "m_lex_list" afin de comparer le lexème actuel avec les lexèmes de notre grammaire, si elle trouve une correspondance alors le token est modifier sinon elle va vérifier le type de ce lexème (Nombre, chaine de caractère) afin de faire un token avec une valeur et un type.*
+**Technical:**
+*First, the, the lexem is compared to the lexicon and if there is a match, the token is modified, else, it will verify the token type (number or string) to create a token with a value and a type.*
 
 <br/><br/>
-#### *Attributs :*
+#### *Attributes :*
 ``` c++
 std::string m_source;
 ``` 
-> Correspond au code source que nous devons analyser.
+> The source code we want to analyse.
 
 <br/>
 
 ``` c++
 unsigned m_source_size;
 ``` 
-> Est la taille de notre code source (nombre de caractère).
+> The source code size (numbers of characters).
 
 <br/>
 
 ``` c++
 std::vector<token> m_lex_list;
 ``` 
-> Est la liste des lexèmes de notre grammaire.
+> Lexicon.
 
 <br/>
 
 ``` c++
 std::string m_lexer_location_file;
 ``` 
-> Est le chemin vers le fichier "lexer.wjc".
+> Path to the lexicon ("lexer.wjc").
 
 <br/><br/>
 #### *Token :*
@@ -171,68 +166,68 @@ std::string m_lexer_location_file;
 > Identifiants :
 
 ```
-Nombre entier               : LEXV_NUMBER
-Nombre flotant              : LEXV_FLOAT
-Chaine de caractère         : LEXV_ID
-Lexème inconnu ou éroné     : LEXV_ERROR
+Integer                 : LEXV_NUMBER
+Float                   : LEXV_FLOAT
+String                  : LEXV_ID
+Unknown or false lexeme : LEXV_ERROR
 ``` 
 <br/><br/>
-### Class PARSER
+### PARSER class 
 
 #### *Description :*
 
 > Cette classe fait une analyse syntaxique du code source analysé par le LEXER, elle est donc connecté avec cette deuxième classe.
 
-#### *Méthodes:*
+#### *Methods:*
 ``` c++
 PARSER(LEXER* lex)
 ```
 
-> Le constructeur prend en paramètre un pointer vers un objet de la classe LEXER afin de pouvoir communiqué avec lui pour récupérer les tokens.
+> The constructor take a pointer to a LEXER class object as a parameter to get its tokens
 <br/>
 
 ``` c++
 bool start_analyse() const
 ```
 
-> Cette méthode lance récupère un à un les token généraient par le LEXER et effectue une analyse, elle envoie True si tout ce passe bien sinon False.
+> This method get every token generated par LEXER and analyse their syntax. It returns true if everything is right and false if there is a mistake.
 <br/>
 
 ``` c++
 void setFilePath(const string &path)
 ```
 
-> Cette méthode permet de définir le fichier "parser.wjc" qui va permettre au parser de générer un arbre syntaxique.
+> This method defines the path to the syntax definition file "parser.wjc" which will permit the generation of the syntactic tree.
 <br/>
 
 <br/><br/>
-#### *Attributs :*
+#### *Attributes :*
 ``` c++
 LEXER* m_lex;
 ``` 
-> Cet attribut est un pointer vers un objet de la classe LEXER qui permet a notre parser de communiquer avec.
+> This attribute is a pointer to the LEXER class object that we want to syntactically analyse.
 <br/>
 
 ``` c++
 parser_tree* m_ptree;
 ``` 
-> Voici un pointer vers un objet de la classe parser_tree qui permet la création d'un arbre syntaxique.
+> This attribute is a pointer to a parser_tree class object that permit the creation of a syntactic tree
 <br/>
 
 ``` c++
 std::string m_parser_location_file;
 ``` 
-> Cet attribut contient le chemin vers le fichier "parser.wjc".
+> This defines the path to the syntax definition file ("parser.wjc").
 <br/>
 
 ``` c++
 bool m_valid_tree;
 ``` 
-> Cet attribut permet au parser de savoir si l'arbre syntaxique est correcte afin de pouvoir lancer une analyse.
+> This attribute informs if the tree is valid to launch an analysis.
 <br/>
 
 <br/><br/>
-## Fichiers WJC
+## WJC Files
 
 ### Lexer.wjc
 
@@ -247,14 +242,14 @@ bool m_valid_tree;
     ; PV
     , VRGL
 
-> Voici un exemple pour ce fichier.
+> There's an example for this file.
 > 
-> "% keywords :" - A partir d'ici on précise que les prochaines lignes définissent des lexèmes protégés donc utilisés dans notre grammaire.
+> "% keywords :" - From there, we define the protected lexemes that are used in the grammary.
 > 
-> "% separators:" - A partir d'ici on précise que les prochaines lignes définissent des lexèmes séparateurs utilisés dans notre grammaire.
+> "% separators:" - From there, we define the separators lexemes that are used in the grammary.
 
 	if IF_CONDITION
-> En premier on écrit le lexème tel qui doit être trouvé dans notre source, séparé d'un espace on précise l'identifiant de ce lexème, qui sera utilisé pour l'analyse syntaxique.
+> First, we have to write the lexeme as how it have to be found in the source, and then you have to precise the lexeme identifier which will be used in the syntactic analysis.
 
 
 ### Parser.wjc
@@ -265,56 +260,56 @@ bool m_valid_tree;
 	
 	PROG : DECLARATION | AFFECTATION | DECLARATION_SOUS_PROGRAMME | APPEL
 		   | STRUCTURE_DE_CONTROLE | BREAK | PROG PROG;
-> Voici un exemple (non complet) pour ce fichier.
-> Ici nous définissons la syntaxe de notre langage, la class PARSER va par la suite générer un arbre syntaxique en référence à ce fichier, il est donc essentiel de bien l'organiser pour éviter les erreurs du parser.
+> There's an example for this file.
+> Here, we define our syntax, so it is this file that will be used to generate the syntactic tree. It is crucial to organize it well to avoid any PARSER errors.
 
 	S : ALGO LEXV_ID CORPS;
 
-> Ici on définit notre axiome "S", il est obligatoire dans ce fichier car c'est la racine de l'arbre syntaxique, sans ça le parser ne pourras pas créer d'arbre.
+> Here, we define the axiom, it is mandatory because it is simply the root of syntactic tree. Without this, it is just impossible for the PARSER to generate the tree.
 
 	CORPS : DEBUT PROG FIN;
-> "CORPS :" - Ici nous définissons un nœud de notre arbre syntaxique et après les deux points nous définissons sa forme, avec d'autres nœuds ou des identifiants de token.
+> "CORPS :" - Here, we define a node in our syntactic tree and his definition (the syntax to respect) which includes other nodes or token identifiers
 
 <br/><br/>
-## Les Erreurs
+## Errors
 ### Parser :
 
     Erreur : The axiom must be 'S'
-> Dans votre fichier "parser.wjc" la première définition doit être la racine de l'arbre syntaxique qu'on appel l'axiome, et doit être un S majuscule, si ce n'est pas le cas, l'arbre de ne pas être construit donc le parser vous renvoie une erreur.
-> Solution : commencez votre définition de syntaxe par (S : ...).
+> In the syntax definition file ("parser.wjc") the first definition must be the axiome definition (with a capital S), if it is not the case, the syntactic tree cannot be built and an error is thrown
+> Solution : You have to start your syntax definition with the axiom (S : ...).
 
     [parser.wjc] - File not found
- > Le parser ne trouve pas le fichier "parser.wjc".
- > Solution : Assurez vous lors de l'utilisation de la méthode "setFilePath" sur votre objet de type parser d'avoir passé en paramètre le bon chemin vers ce fichier.
+ > The parser cannot find the file "parser.wjc".
+ > Solution : Make sure that you have used the good file path as parameter for the PARSER class method "setFilePath"
 
     [parser.wjc]  -  File  location  not  specified.  Please  use  PARSER::setFilePath()
- > Ici on vous dit que le chemin vers le fichier "parser.wjc" n'a pas été définis.
- > Solution : Après avoir créer un objet de la class PARSER, utilisez la méthode "setFilePath()" et passez lui en paramètre le chemin vers ce fichier.
+ > The PARSER file path as not been defined
+ > Solution : After the creation of a PARSER object you have to use the "setFilePath()" method and write the defintion file path as the parameter.
 
     The  syntax  tree  is  not  correct.
-> Cette erreur arrive lorsque vous essayez de lancer l'analyse syntaxique alors que l'arbre syntaxique n'est pas correctement construit.
-> Solution : Assurez vous de ne pas avoir d'erreur lors de l'utilisation de la méthode PARSER::setFilePath() qui génère l'arbre syntaxique.
+> This error is thrown when you try to launch the analysis with a incorrect syntactic tree
+> Solution : Make sure that you don't have a mistake with the PARSER::setFilePath() method which generate the syntactic tree or in the syntactic definition file.
 
 ### Lexer :
 
     [lexer.wjc] - File location not specified. Please use LEXER::setFilePath()
- > Ici on vous dit que le chemin vers le fichier "lexer.wjc" n'a pas été définis.
- > Solution : Après avoir créer un objet de la class LEXER, utilisez la méthode "setFilePath()" et passez lui en paramètre le chemin vers ce fichier.
+ > The lexer cannot find the file "lexer.wjc".
+ > Solution : Make sure that you have used the good file path as parameter for the LEXER class method "setFilePath"
 
     [lexer.wjc] - File not found
- > Le lexer ne trouve pas le fichier "lexer.wjc".
- > Solution : Assurez vous lors de l'utilisation de la méthode "setFilePath" sur votre objet de type lexer d'avoir passé en paramètre le bon chemin vers ce fichier.
+ > The LEXER file path as not been defined
+ > Solution : After the creation of a LEXER object you have to use the "setFilePath()" method and write the definition file path as the parameter.
 
-    Lexeme with too many dots
-> Ici le lexer vous dit qu'il a trouvé un lexème contenant trop de points exemple : "58.23.65".
-> Solution : Corrigez votre code source.
+    Too many dots in this lexeme
+> The LEXER informs you that a lexeme contains too many dots (for example : "58.23.65").
+> Solution : Correct your source code.
 
     Source is empty.
-> Cette erreur parvient lorsque le code source donné au lexer est vide.
-> Solution : Lorsque vous passez un code source à votre lexer, assurez vous que la chaine de caractère n'est pas vide.
+> This error occurs when the source code given to the LEXER is empty.
+> Solution : Make sure that the code source as a string affected to the LEXER contains something.
 
 <br/><br/><br/>
-# Test Lexer
+# Lexer Test
 
 > Fichier main.cpp :
 ``` c++
