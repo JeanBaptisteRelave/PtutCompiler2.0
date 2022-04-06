@@ -5,19 +5,19 @@
 
 using namespace std;
 
-int main(int argc, char const *argv[])
+int main()
 {
-    ifstream if_flux("C:/Users/jeanb/Documents/DUT2/PTUT/main.pdut");
+    ifstream if_stream("C:/Users/jeanb/Documents/DUT2/PTUT/main.pdut");
     string source;
 
     string line;
-    while(getline(if_flux, line))
+    while(getline(if_stream, line))
         source += line + "\n";
 
     LEXER lex(source);
     lex.setFilePath("C:/Users/jeanb/Documents/DUT2/PTUT/compiler/lexer.wjc");
 
-    PARSER synt(&lex);
+    PARSER synt(lex *);
     synt.setFilePath("C:/Users/jeanb/Documents/DUT2/PTUT/compiler/parser.wjc");
 
     synt.start_analyse();
